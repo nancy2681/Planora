@@ -54,6 +54,10 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Planora server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Planora server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+  });
+}
+
+export default app;

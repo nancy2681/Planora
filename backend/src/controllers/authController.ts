@@ -5,6 +5,7 @@ import crypto from 'crypto';
 import { User } from '../models/User';
 import { AuthRequest } from '../types';
 import { sendResetEmail } from '../services/emailService';
+import { uploadToCloudinary } from '../config/cloudinary';
 
 const generateToken = (id: string): string => {
   return jwt.sign({ id }, process.env.JWT_SECRET || 'planora_development_secret_key_12345', {
@@ -123,7 +124,8 @@ export const updateMe = async (req: AuthRequest, res: Response): Promise<void> =
 
     if (name) user.name = name;
     if (req.file) {
-      user.avatarUrl = `/uploads/${req.file.filename}`;
+      const secureUrl = await uploadToCloudinary(req.file.buffer, 'planora/avatars');
+      user.avatarUrl = secureUrl;
     }
 
     await user.save();

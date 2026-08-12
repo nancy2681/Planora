@@ -5,6 +5,7 @@ import { Project } from '../models/Project';
 import { User } from '../models/User';
 import { Notification } from '../models/Notification';
 import { AuthRequest } from '../types';
+import { uploadToCloudinary } from '../config/cloudinary';
 
 // Helper to send a notification
 export const notifyUser = async (
@@ -323,6 +324,11 @@ export const uploadAttachment = async (req: AuthRequest, res: Response): Promise
       return;
     }
 
+    if (!req.file) {
+      res.status(400).json({ message: 'No file uploaded' });
+      return;
+    }
+
     // Identify file type
     let fileType: 'image' | 'video' | 'pdf' | 'other' = 'other';
     if (req.file.mimetype.startsWith('image/')) {
@@ -333,7 +339,7 @@ export const uploadAttachment = async (req: AuthRequest, res: Response): Promise
       fileType = 'pdf';
     }
 
-    const fileUrl = `/uploads/${req.file.filename}`;
+    const fileUrl = await uploadToCloudinary(req.file.buffer, 'planora/attachments');
 
     const newAttachment = {
       name: req.file.originalname,
