@@ -69,3 +69,7 @@ Planora/
 ## 🚀 Live Deployment Guide
 
 Please refer to the detailed [walkthrough.md](file:///Users/nancy/.gemini/antigravity-ide/brain/827d59fa-85aa-4850-8cf5-886a7a85ad76/walkthrough.md) artifact in the agent brain directory for step-by-step instructions on deploying the database to MongoDB Atlas (Free M0), the server to Render (Free Web Service), and the React SPA to Vercel (Free Hobby Tier).
+
+
+frontend prod link: https://planora-6iln.vercel.app/
+backend prod link: https://planora-psi-jade.vercel.app/
