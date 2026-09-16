@@ -25,7 +25,12 @@ export const Login: React.FC = () => {
       await login(email, password);
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
+      const apiData = err.response?.data;
+      if (apiData?.error && apiData?.message) {
+        setError(`${apiData.message}: ${apiData.error}`);
+      } else {
+        setError(apiData?.message || 'Login failed. Please check your credentials.');
+      }
     } finally {
       setSubmitting(false);
     }

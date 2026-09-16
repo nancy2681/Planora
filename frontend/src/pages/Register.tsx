@@ -26,7 +26,12 @@ export const Register: React.FC = () => {
       await register(name, email, password);
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+      const apiData = err.response?.data;
+      if (apiData?.error && apiData?.message) {
+        setError(`${apiData.message}: ${apiData.error}`);
+      } else {
+        setError(apiData?.message || 'Registration failed. Please try again.');
+      }
     } finally {
       setSubmitting(false);
     }
