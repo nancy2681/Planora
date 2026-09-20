@@ -73,3 +73,6 @@ Please refer to the detailed [walkthrough.md](file:///Users/nancy/.gemini/antigr
 
 frontend prod link: https://planora-6iln.vercel.app/
 backend prod link: https://planora-psi-jade.vercel.app/
+name: Nancy , dummy user
+email: bhadiyadranancy@gmail.com , dummyuser@yopmail.com
+password: 123456
