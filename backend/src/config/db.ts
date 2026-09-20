@@ -1,4 +1,13 @@
 import mongoose from 'mongoose';
+import dns from 'dns';
+
+// Fix for querySrv ENOTFOUND on serverless / cloud environments:
+// Node's default resolver can fail resolving DNS SRV records in some container/network environments.
+try {
+  dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
+} catch {
+  // Ignore if custom DNS servers are not permitted in current environment
+}
 
 interface MongooseCache {
   conn: typeof mongoose | null;

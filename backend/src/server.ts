@@ -44,13 +44,20 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
     await connectDB();
     next();
   } catch (error) {
-    console.error('Database connection error in request:', (error as Error).message);
+    const errorMsg = (error as Error).message || '';
+    console.error('Database connection error in request:', errorMsg);
+
+    let hint = 'Please ensure your local MongoDB instance is running.';
+    if (errorMsg.includes('querySrv ENOTFOUND')) {
+      hint = 'The MongoDB Atlas cluster host in your MONGO_URI could not be resolved. Please verify: 1) The cluster address is spelled correctly in Vercel Environment Variables. 2) The cluster in MongoDB Atlas is active (not deleted or paused). 3) Alternatively, use the standard 3-node connection string from Atlas (Node.js 2.2.12 or earlier format) to bypass DNS SRV lookups.';
+    } else if (process.env.VERCEL) {
+      hint = 'Please ensure MONGO_URI is configured in your Vercel Project Settings > Environment Variables, and that MongoDB Atlas Network Access has 0.0.0.0/0 whitelisted.';
+    }
+
     res.status(503).json({
       message: 'Database connection failed',
-      error: (error as Error).message,
-      hint: process.env.VERCEL
-        ? 'Please ensure MONGO_URI is configured in your Vercel Project Settings > Environment Variables, and that MongoDB Atlas Network Access has 0.0.0.0/0 whitelisted.'
-        : 'Please ensure your local MongoDB instance is running.',
+      error: errorMsg,
+      hint,
     });
   }
 });
