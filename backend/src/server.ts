@@ -50,6 +50,8 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
     let hint = 'Please ensure your local MongoDB instance is running.';
     if (errorMsg.includes('querySrv ENOTFOUND')) {
       hint = 'The MongoDB Atlas cluster host in your MONGO_URI could not be resolved. Please verify: 1) The cluster address is spelled correctly in Vercel Environment Variables. 2) The cluster in MongoDB Atlas is active (not deleted or paused). 3) Alternatively, use the standard 3-node connection string from Atlas (Node.js 2.2.12 or earlier format) to bypass DNS SRV lookups.';
+    } else if (errorMsg.includes('authentication failed') || errorMsg.includes('bad auth')) {
+      hint = 'MongoDB Atlas rejected the database username or password in your MONGO_URI. In MongoDB Atlas, go to "Database Access", check your database username, or click "Edit" to set a new password. Then update MONGO_URI in Vercel. (Note: Database User credentials in Atlas are different from your Atlas web login email/password).';
     } else if (process.env.VERCEL) {
       hint = 'Please ensure MONGO_URI is configured in your Vercel Project Settings > Environment Variables, and that MongoDB Atlas Network Access has 0.0.0.0/0 whitelisted.';
     }
